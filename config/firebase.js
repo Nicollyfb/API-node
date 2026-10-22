@@ -1,9 +1,13 @@
 const admin = require("firebase-admin");
 
-// Como estão na mesma pasta (config), basta usar "./" seguido do nome exato do arquivo
-const serviceAccount = require("./serviceAccountKey.json"); 
-// Nota: Se o seu arquivo na pasta config tiver o nome longo (ex: biscoito-47089-...), 
-// substitua "serviceAccountKey.json" pelo nome exato dele.
+let serviceAccount;
+
+// Se a variável de ambiente existir (no Render), usa-a. Caso contrário, lê o ficheiro local (no PC).
+if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+} else {
+    serviceAccount = require("./serviceAccountKey.json");
+}
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
